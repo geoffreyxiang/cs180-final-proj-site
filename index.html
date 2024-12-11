@@ -1,0 +1,218 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS 180 Final Project</title>
+</head>
+<body style="font-family: Verdana;">
+    <center><h1>CS 180 Final Project 1 - Image Quilting</h1></center>
+    <h2>Randomly Sampled Texture</h2>
+    <p>
+	Starting with the simplest quilting approach, I randomly sampled patches from the original texture image until a new texture image was created. This approach leaves very noticeable edges between samples, especially when adjacent samples clearly don't align well. 
+    </p>
+    <div class="container">
+	<figure>
+	    <img src="assets/bricks.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/bricks_random.png"/>
+	    <figcaption>Randomly Sampled Texture</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/text.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/text_random.png"/>
+	    <figcaption>Randomly Sampled Texture</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/cloth.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/cloth_random.png"/>
+	    <figcaption>Randomly Sampled Texture</figcaption>
+	</figure>
+    </div>
+    <h2>Overlapping Patches</h2>
+    <p>
+	In order to make borders between patches more smooth, I used a slightly more involved approach when sampling the original texture. Each new patch overlapped the adjacent patches by a constant amount of pixels, and patches were selected based on how well they matched the existing overlapping sections. I used SSD among pixel values as the similarity metric. The best 5 matches for the given patch would then be randomly sampled. Although this method still left some edge artifacts, it was significantly cleaner than the naive approach since certain lines within the textures would mostly be aligned.
+    </p>
+    <div class="container">
+	<figure>
+	    <img src="assets/bricks.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/bricks_simple.png"/>
+	    <figcaption>Simple Sampling</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/text.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/text_simple.png"/>
+	    <figcaption>Simple Sampling</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/cloth.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/cloth_simple.png"/>
+	    <figcaption>Simple Sampling</figcaption>
+	</figure>
+    </div>
+    <h2>Seam Finding</h2>
+    <p>
+	Since the previous result still had some sharp edge artifacts, I used seam finding to remove or at least smoothen them out. This process utilizes a dynamic programming algorithm to find the min-cost path through a the overlapping region of a patch, and this path then becomes the border for the new patch to be inserted. This technique improved edges dramatically, but it still isn't able to completely salvage the edge if there was a clear difference in continuous lines through adjacent patches (as seen in the bricks texture). 
+    </p>
+    <div class="container">
+	<figure>
+	    <img src="assets/bricks.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/bricks_simple.png"/>By
+	    <figcaption>Simple Sampling</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/bricks_seam.png"/>
+	    <figcaption>Seam Finding Result</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/text.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/text_simple.png"/>
+	    <figcaption>Simple Sampling</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/text_seam.png"/>
+	    <figcaption>Seam Finding Result</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/cloth.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/cloth_simple.png"/>
+	    <figcaption>Simple Sampling</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/cloth_seam.png"/>
+	    <figcaption>Seam Finding Result</figcaption>
+	</figure>
+    </div>
+    <h2>Texture Transfer</h2>
+    <p>
+	Using the ability to synthesize new versions of a texture, I can now guide the creation of textures with a target image. By weighting the patch generation process with both the overlap similarity as well as similarity with the corresponding patch in the target image, I generated textures following the patterns within the target image. 
+    </p>
+    <div class="container">
+	<figure>
+	    <img src="assets/lines.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/feynman.png"/>
+	    <figcaption>Target Image</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/lines_feynman.png"/>
+	    <figcaption>Texture Transfer</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/bricks.png">
+	    <figcaption>Texture</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/feynman.png"/>
+	    <figcaption>Target Image</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/bricks_feynman.png"/>
+	    <figcaption>Texture Transfer</figcaption>
+	</figure>
+    </div>
+    <h4>Bells & Whistles: Iterative Transfer</h4>
+    <p>
+	The previous texture transfer process can be further improved by iteratively running the same algorithm on the outputted sample texture with decreasing patch sizes. This improves the alignment process by ensuring that the smaller patches in further iterations will more granularly fit together. We can see how smaller details in the target image are able to be captured slightly better with the iterative process. 
+    </p>
+    <div class="container">
+	<figure>
+	    <img src="assets/lines_feynman.png"/>
+	    <figcaption>Texture Transfer</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/iterative_lines_feynman.png"/>
+	    <figcaption>Iterative Texture Transfer</figcaption>
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/bricks_feynman.png"/>
+	    <figcaption>Texture Transfer</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/iterative_bricks_feynman.png"/>
+	    <figcaption>Iterative Texture Transfer</figcaption>
+	</figure>
+    </div>
+</body>
+<style>
+    .container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    }
+
+    figure {
+	display: table;
+	margin-left: 5px;
+	margin-right: 5px;
+    }
+
+    figcaption {
+	display: table-caption;
+	caption-side: bottom;
+	text-align: center;
+	font-size: 14px;
+    }
+
+    img {
+	max-height: 350px;
+	max-width: 350px;
+    }
+
+    .big {
+	max-height: 700px;
+	max-width: 700px;
+	width: 700px;
+    }
+
+    .flipped {
+	transform: scaleY(-1);
+    }
+
+
+</style>
+</html>
