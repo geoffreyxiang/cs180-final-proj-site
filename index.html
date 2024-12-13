@@ -185,6 +185,57 @@
 	    <figcaption>Iterative Texture Transfer</figcaption>
 	</figure>
     </div>
+    <center><h1>CS 180 Final Project 2 - Light Field Camera</h1></center>
+    <h2>Depth Refocusing</h2>
+    <p>
+	Using the chessboard images from the Stanford Light Field Archive, I first implemented depth refocusing. Since all of the images in the dataset were taken with a grid of translated cameras along a parallel plane, I was able to utilize them to modify image depths. Given the amount each camera was translated in relation to the center (dx and dy), I shifted each image by C * dx and -C * dy, where C was a value I changed to control the depth. When C is 0, none of the images are shifted and the farther objects are in focus. When C is a greater value such as 3, closer objects are in focus. The below gif shows how gradually increasing C shifts refocuses the camera from objects farther away to closer (up to down on the chess board).
+    </p>
+    <div class="container">
+	<figure>
+	    <img class="big" src="assets/refocusing_chess.gif">
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/chess0.jpeg">
+	    <figcaption>C=0</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/chess15.jpeg">
+	    <figcaption>C=1.5</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/chess3.jpeg">
+	    <figcaption>C=3</figcaption>
+	</figure>
+    </div>
+    <h2>Aperture Adjustment</h2>
+    <p>
+	Moving on to aperture adjustment, the process was very similar to that of depth refocusing. The main change was that we now ignore images that are more than a certain distance away defined by the aperture. From the previous part, I know that C=1.5 works well for focusing on the center of the chessboard, so I can now vary the aperture amount to change the level of blur on the outer areas. Intuitively, if I use more images that have a greater displacement from the center, I'll get a blurrier image. We can see that effect in the below gif as I increase the aperture while keeping C constant.  
+    </p>
+    <div class="container">
+	<figure>
+	    <img class="big" src="assets/aperture_chess.gif">
+	</figure>
+    </div>
+    <div class="container">
+	<figure>
+	    <img src="assets/aperture_chess0.jpeg">
+	    <figcaption>Aperture=0</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/aperture_chess4.jpeg">
+	    <figcaption>Aperture=4</figcaption>
+	</figure>
+	<figure>
+	    <img src="assets/aperture_chess8.jpeg">
+	    <figcaption>Aperture=8</figcaption>
+	</figure>
+    </div>
+    <h2>Summary</h2>
+    <p>
+	It was interesting to learn how we can achieve fairly complicated camera effects with some basic math operations. I also learned about how cameras work in terms of the importance of aperture and how it changes how photos turn out. On the implementation side, I learned a bit more on how to deal with creating gifs. 
+    </p>
 </body>
 <style>
     .container {
